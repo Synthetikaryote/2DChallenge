@@ -1,0 +1,10 @@
+﻿Build started 7/12/2015 3:30:59 PM.
+     1>Project "\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Tools\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.lib" /MACHINE:X86 Debug\Main.obj
+         2DChallenge.vcxproj -> \\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe
+     1>Done Building Project "\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.40
