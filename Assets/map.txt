@@ -1,0 +1,38 @@
+[legend]
+  empty
+- grassMid.png
+. grassCenter.png
+( grassCliffLeft.png
+) grassCliffRight.png
+P player
+
+[map]
+.                                                                                                  
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+   P                 (-----)                                                                      
+ (-----------)        .....                                                                        
+  ...........         .....                                                                        
+  ...........         .....                                                                        
+  ...........         .....                                                                        
+  ...........         .....                                                                        
+  ...........         .....                                                                        
+  ...........         .....                                                                        
