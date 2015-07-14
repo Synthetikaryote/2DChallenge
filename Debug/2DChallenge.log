@@ -1,20 +1,20 @@
-﻿Build started 7/12/2015 9:50:20 PM.
-     1>Project "\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" on node 2 (Build target(s)).
+﻿Build started 7/14/2015 1:33:56 PM.
+     1>Project "Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Tools\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(79): warning C4554: '&' : check operator precedence for possible error; use parentheses to clarify precedence
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(136): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(137): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(142): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(143): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(153): warning C4244: '=' : conversion from 'float' to 'Sint16', possible loss of data
-     1>\\psf\home\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(154): warning C4244: '=' : conversion from 'float' to 'Sint16', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(63): warning C4554: '&' : check operator precedence for possible error; use parentheses to clarify precedence
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(117): warning C4018: '<' : signed/unsigned mismatch
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(118): warning C4018: '<' : signed/unsigned mismatch
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(123): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(124): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(176): warning C4244: '=' : conversion from 'float' to 'Sint16', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(177): warning C4244: '=' : conversion from 'float' to 'Sint16', possible loss of data
        Link:
-         C:\Tools\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib SDL_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.lib" /MACHINE:X86 Debug\Main.obj
-         2DChallenge.vcxproj -> \\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe
-     1>Done Building Project "\\psf\Home\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" (Build target(s)).
+         C:\Tools\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib SDL_image.lib SDL_ttf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.lib" /MACHINE:X86 Debug\Main.obj
+         2DChallenge.vcxproj -> Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe
+     1>Done Building Project "Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.15
+Time Elapsed 00:00:01.60

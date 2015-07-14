@@ -10,12 +10,10 @@ using namespace std;
 SDL_Surface* loadSurface(string path);
 
 //The attributes of the screen
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;
 const int SCREEN_BPP = 32;
-//The surfaces that will be used
-SDL_Surface* message = NULL;
-SDL_Surface* background = NULL;
+
 SDL_Surface* screen = NULL;
 map<char, SDL_Surface*> tiles;
 vector<string> level;
@@ -26,36 +24,24 @@ float playerY;
 //The event structure that will be used
 SDL_Event event;
 
-SDL_Surface* load_image(string filename)
-{
-	//The image that's loaded
-	SDL_Surface* loadedImage = NULL;
-
-	//The optimized image that will be used
-	SDL_Surface* optimizedImage = NULL;
-
-	//Load the image using SDL_image
-	loadedImage = IMG_Load(filename.c_str());
-
-	//If the image loaded
-	if (loadedImage != NULL)
-	{
+SDL_Surface* load_image(string filename) {
+	SDL_Surface* loadedImage = IMG_Load(filename.c_str());
+	if (loadedImage) {
 		//Create an optimized image
-		optimizedImage = SDL_DisplayFormatAlpha(loadedImage);
+		SDL_Surface* optimizedImage = SDL_DisplayFormatAlpha(loadedImage);
 
 		//Free the old image
 		SDL_FreeSurface(loadedImage);
+
+		return optimizedImage;
 	}
 	else {
 		string error = IMG_GetError();
 	}
-
-	//Return the optimized image
-	return optimizedImage;
+	return NULL;
 }
 
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination)
-{
+void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) {
 	//Make a temporary rectangle to hold the offsets
 	SDL_Rect offset;
 
@@ -67,9 +53,7 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination)
 	SDL_BlitSurface(source, NULL, destination, &offset);
 }
 
-int main(int argc, char* args[])
-{
-
+int main(int argc, char* args[]) {
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
 		return 1;
@@ -90,7 +74,7 @@ int main(int argc, char* args[])
 	}
 
 	//Set the window caption
-	SDL_WM_SetCaption("3DChallenge", NULL);
+	SDL_WM_SetCaption("2DChallenge", NULL);
 
 	// load the level
 	ifstream mapFile("Assets/map.txt");
@@ -119,26 +103,23 @@ int main(int argc, char* args[])
 		}
 	}
 
-	// fill the screen with sky
-	SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 200, 200));
-	
-	// draw the map
+	// draw the level
 	int w = level[0].length();
 	int h = level.size();
 	int tw = tiles.begin()->second->w;
 	int th = tiles.begin()->second->h;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	SDL_Surface* levelSurface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	SDL_Surface* levelSurface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 24, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x00000000);
 #else
-	SDL_Surface* levelSurface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+	SDL_Surface* levelSurface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0x00000000);
 #endif
-	SDL_FillRect(levelSurface, NULL, SDL_MapRGBA(levelSurface->format, 0, 0, 0, 0));
+	SDL_FillRect(levelSurface, NULL, SDL_MapRGB(levelSurface->format, 100, 200, 200));
 	for (int r = 0; r < level.size(); r++) {
 		for (int c = 0; c < level[r].length(); c++) {
 			if (c == ' ') {
-				
 			}
 			else if (level[r][c] == playerC) {
+				// get the player coordinates from the spawn point marker
 				playerX = c * tw;
 				playerY = r * th;
 			}
@@ -147,28 +128,64 @@ int main(int argc, char* args[])
 			}
 		}
 	}
-
-	// blit the level so that the player is in the center
-	SDL_Rect sourceRect;
-	sourceRect.x = playerX - SCREEN_WIDTH / 2;
-	sourceRect.y = playerY - SCREEN_HEIGHT / 2;
-	sourceRect.w = SCREEN_WIDTH;
-	sourceRect.h = SCREEN_HEIGHT;
-	SDL_BlitSurface(levelSurface, &sourceRect, screen, NULL);
-
-	//Update the screen
-	if (SDL_Flip(screen) == -1)
-	{
-		return 1;
+	// we don't need the tiles anymore, so free them all
+	for (auto i = tiles.begin(); i != tiles.end(); i++) {
+		SDL_FreeSurface(i->second);
 	}
+	// optimize the level
+	SDL_Surface* temp = SDL_DisplayFormat(levelSurface);
+	SDL_FreeSurface(levelSurface);
+	levelSurface = temp;
 
-	//Wait 2 seconds
-	SDL_Delay(2000);
-	return 0;
+	SDL_Rect levelRect;
+	levelRect.w = SCREEN_WIDTH;
+	levelRect.h = SCREEN_HEIGHT;
 
-	//Free the surfaces
-	SDL_FreeSurface(message);
-	SDL_FreeSurface(background);
+	bool run = true;
+	Uint32 lastTicks = 0;
+	while (run) {
+		Uint32 ticks = SDL_GetTicks();
+		float elapsed = (ticks - lastTicks) / 1000.0f;
+		lastTicks = ticks;
+
+		const Uint8 *state = SDL_GetKeyState(NULL);
+		float speed = 1000.0f;
+		if (state[SDLK_f]) {
+			playerX += speed * elapsed;
+		}
+		if (state[SDLK_s]) {
+			playerX -= speed * elapsed;
+		}
+		if (state[SDLK_e]) {
+			playerY -= speed * elapsed;
+		}
+		if (state[SDLK_d]) {
+			playerY += speed * elapsed;
+		}
+
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT) {
+				run = false;
+			}
+		}
+		
+		// fill the screen with sky color
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 200, 200));
+
+		// blit the level so that the player is in the center
+		levelRect.x = playerX - SCREEN_WIDTH / 2;
+		levelRect.y = playerY - SCREEN_HEIGHT / 2;
+		SDL_BlitSurface(levelSurface, &levelRect, screen, NULL);
+
+		//Update the screen
+		if (SDL_Flip(screen) == -1) {
+			return 1;
+		}
+
+		int delay = 1000 / 60 - SDL_GetTicks() + lastTicks;
+		if (delay>0)
+			SDL_Delay(delay);
+	}
 
 	//Quit SDL
 	SDL_Quit();
