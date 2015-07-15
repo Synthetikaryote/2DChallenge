@@ -5,6 +5,7 @@ class Character
 {
 public:
 	float x, y;
+	float vx, vy;
 	float offsetX, offsetY;
 	Sprite* sprite;
 	Character();

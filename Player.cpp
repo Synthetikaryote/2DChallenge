@@ -1,8 +1,9 @@
 #include "Player.h"
-
+#include "Uber.h"
 
 Player::Player()
 {
+	ducking = false;
 }
 
 
@@ -15,14 +16,27 @@ void Player::Update(float elapsed) {
 
 	const Uint8 *state = SDL_GetKeyState(NULL);
 	float speed = 300.0f;
-	bool moving = false;
 	if (state[SDLK_d]) {
-		x += speed * elapsed;
-		moving = true;
+		vx += speed * elapsed;
 	}
 	if (state[SDLK_a]) {
-		x -= speed * elapsed;
-		moving = true;
+		vx -= speed * elapsed;
 	}
-	sprite->SetAnimation(moving ? "p3_walk" : "p3_stand");
+	if (state[SDLK_s]) {
+		ducking = true;
+		float doy = Uber::I().level->th - sprite->GetFrames("p3_duck")[0].h + 4.0f - offsetY;
+		offsetY += doy;
+		y += doy;
+	}
+	else {
+		ducking = false;
+		float doy = Uber::I().level->th - sprite->GetFrames("p3_walk")[0].h + 4.0f - offsetY;
+		offsetY += doy;
+		y += doy;
+	}
+	
+	x += vx;
+	sprite->SetAnimation(ducking ? "p3_duck" : (vx ? "p3_walk" : "p3_stand"));
+
+	vx = 0.0f;
 }

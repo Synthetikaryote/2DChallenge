@@ -14,11 +14,10 @@ Sprite::Sprite(string spriteSheetImage, string spriteSheetData) {
 	while (spriteData >> frameName >> _ >> rect.x >> rect.y >> rect.w >> rect.h) {
 		// the animation name is the frame name without the numbers at the end
 		string animationName;
-		for (int i = frameName.length() - 1; i >= 0; i--) {
-			if (!isdigit(frameName[i])) {
-				animationName = frameName.substr(0, i + 1);
-				break;
-			}
+		regex expr("(.*[^0-9])");
+		smatch match;
+		if (regex_search(frameName, match, expr)) {
+			animationName = match[0];
 		}
 		// store the first animation found as the one set for the Sprite
 		if (currentAnimationName.empty()) {
