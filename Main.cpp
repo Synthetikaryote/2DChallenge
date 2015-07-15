@@ -5,55 +5,25 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include "Utils.h"
+#include "Sprite.h"
+#include "Player.h"
+#include "Enemy.h"
 using namespace std;
 
-SDL_Surface* loadSurface(string path);
-
-//The attributes of the screen
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
-const int SCREEN_BPP = 32;
-
-SDL_Surface* screen = NULL;
-map<char, SDL_Surface*> tiles;
-vector<string> level;
-char playerC;
-float playerX;
-float playerY;
-
-//The event structure that will be used
-SDL_Event event;
-
-SDL_Surface* load_image(string filename) {
-	SDL_Surface* loadedImage = IMG_Load(filename.c_str());
-	if (loadedImage) {
-		//Create an optimized image
-		SDL_Surface* optimizedImage = SDL_DisplayFormatAlpha(loadedImage);
-
-		//Free the old image
-		SDL_FreeSurface(loadedImage);
-
-		return optimizedImage;
-	}
-	else {
-		string error = IMG_GetError();
-	}
-	return NULL;
-}
-
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) {
-	//Make a temporary rectangle to hold the offsets
-	SDL_Rect offset;
-
-	//Give the offsets to the rectangle
-	offset.x = x;
-	offset.y = y;
-
-	//Blit the surface
-	SDL_BlitSurface(source, NULL, destination, &offset);
-}
-
 int main(int argc, char* args[]) {
+	//The attributes of the screen
+	const int SCREEN_WIDTH = 1024;
+	const int SCREEN_HEIGHT = 768;
+	const int SCREEN_BPP = 32;
+
+	SDL_Surface* screen = NULL;
+	map<char, SDL_Surface*> tiles;
+	vector<string> level;
+	char playerC;
+	Player* player = new Player();
+	vector<Enemy*> enemies;
+
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
 		return 1;
@@ -91,7 +61,7 @@ int main(int argc, char* args[]) {
 						playerC = line[0];
 					}
 					else {
-						tiles[line[0]] = load_image("Assets/Tiles/" + fileName);
+						tiles[line[0]] = Utils::load_image("Assets/Tiles/" + fileName);
 						SDL_SetAlpha(tiles[line[0]], SDL_SRCALPHA | SDL_RLEACCEL, 255);
 					}
 				}
@@ -103,11 +73,17 @@ int main(int argc, char* args[]) {
 		}
 	}
 
-	// draw the level
 	int w = level[0].length();
 	int h = level.size();
 	int tw = tiles.begin()->second->w;
 	int th = tiles.begin()->second->h;
+
+	// load the player
+	player->sprite = new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt");
+	player->offsetX = -player->sprite->GetFrame("p3_walk01").w / 2.0f;
+	player->offsetY = th - player->sprite->GetFrame("p3_walk01").h + 4.0f;
+
+	// draw the level and find the player start point
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	SDL_Surface* levelSurface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 24, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x00000000);
 #else
@@ -120,11 +96,11 @@ int main(int argc, char* args[]) {
 			}
 			else if (level[r][c] == playerC) {
 				// get the player coordinates from the spawn point marker
-				playerX = c * tw;
-				playerY = r * th;
+				player->x = c * tw + player->offsetX;
+				player->y = r * th + player->offsetY;
 			}
 			else {
-				apply_surface(c * tw, r * th, tiles[level[r][c]], levelSurface);
+				Utils::apply_surface(c * tw, r * th, tiles[level[r][c]], levelSurface);
 			}
 		}
 	}
@@ -148,21 +124,9 @@ int main(int argc, char* args[]) {
 		float elapsed = (ticks - lastTicks) / 1000.0f;
 		lastTicks = ticks;
 
-		const Uint8 *state = SDL_GetKeyState(NULL);
-		float speed = 1000.0f;
-		if (state[SDLK_f]) {
-			playerX += speed * elapsed;
-		}
-		if (state[SDLK_s]) {
-			playerX -= speed * elapsed;
-		}
-		if (state[SDLK_e]) {
-			playerY -= speed * elapsed;
-		}
-		if (state[SDLK_d]) {
-			playerY += speed * elapsed;
-		}
+		player->Update(elapsed);
 
+		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				run = false;
@@ -173,11 +137,20 @@ int main(int argc, char* args[]) {
 		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 200, 200));
 
 		// blit the level so that the player is in the center
-		levelRect.x = playerX - SCREEN_WIDTH / 2;
-		levelRect.y = playerY - SCREEN_HEIGHT / 2;
+		float playerOX = -36.0f;
+		float playerOY = th - 93.0f;
+		float screenX = player->x - SCREEN_WIDTH / 2;
+		float screenY = player->y - SCREEN_HEIGHT / 2;
+		levelRect.x = screenX;
+		levelRect.y = screenY;
 		SDL_BlitSurface(levelSurface, &levelRect, screen, NULL);
 
-		//Update the screen
+		// blit the player
+		player->Draw(screen, -screenX, -screenY);
+
+		SDL_FillRect(screen, &(Utils::MakeRect(player->x - player->offsetX - screenX, player->y - player->offsetY + th - screenY, 3, 3)), SDL_MapRGB(screen->format, 255, 0, 0));
+
+		// update the screen
 		if (SDL_Flip(screen) == -1) {
 			return 1;
 		}
@@ -187,9 +160,13 @@ int main(int argc, char* args[]) {
 			SDL_Delay(delay);
 	}
 
-	//Quit SDL
-	SDL_Quit();
+	// free the memory
+	SDL_FreeSurface(levelSurface);
+	delete player;
+	for (int i = 0; i < enemies.size(); i++) {
+		delete enemies[i];
+	}
+	SDL_Quit(); // frees the screen surface
 
-	//Return
 	return 0;
 }
