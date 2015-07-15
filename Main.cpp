@@ -21,7 +21,7 @@ int main(int argc, char* args[]) {
 	map<char, SDL_Surface*> tiles;
 	vector<string> level;
 	char playerC;
-	Player* player = new Player();
+	Player* player;
 	vector<Enemy*> enemies;
 
 	//Initialize all SDL subsystems
@@ -79,9 +79,11 @@ int main(int argc, char* args[]) {
 	int th = tiles.begin()->second->h;
 
 	// load the player
+	player = new Player();
 	player->sprite = new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt");
-	player->offsetX = -player->sprite->GetFrame("p3_walk01").w / 2.0f;
-	player->offsetY = th - player->sprite->GetFrame("p3_walk01").h + 4.0f;
+	player->sprite->SetAnimation("p3_walk");
+	player->offsetX = -player->sprite->GetFrames("p3_walk")[0].w / 2.0f;
+	player->offsetY = th - player->sprite->GetFrames("p3_walk")[0].h + 4.0f;
 
 	// draw the level and find the player start point
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
