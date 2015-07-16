@@ -34,14 +34,14 @@ Level::Level(string fileName)
 
 	w = level[0].length();
 	h = level.size();
-	tw = tiles.begin()->second->w;
-	th = tiles.begin()->second->h;
+	tileWidth = tiles.begin()->second->w;
+	tileHeight = tiles.begin()->second->h;
 
 	// draw the level and find the player start point
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 24, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x00000000);
+	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tileWidth, h * tileHeight, 24, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x00000000);
 #else
-	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tw, h * th, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0x00000000);
+	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tileWidth, h * tileHeight, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0x00000000);
 #endif
 	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 100, 200, 200));
 	for (int r = 0; r < level.size(); r++) {
@@ -50,11 +50,11 @@ Level::Level(string fileName)
 			}
 			else if (level[r][c] == playerC) {
 				// get the player coordinates from the spawn point marker
-				playerStartX = c * tw;
-				playerStartY = r * th;
+				playerStartX = c * tileWidth;
+				playerStartY = r * tileHeight;
 			}
 			else {
-				Utils::apply_surface(c * tw, r * th, tiles[level[r][c]], surface);
+				Utils::apply_surface(c * tileWidth, r * tileHeight, tiles[level[r][c]], surface);
 			}
 		}
 	}
@@ -72,4 +72,11 @@ Level::Level(string fileName)
 Level::~Level()
 {
 	SDL_FreeSurface(surface);
+}
+
+bool Level::IsBlocked(int col, int row) {
+	if (col < 0 || col >= w || row < 0 || row >= h)
+		return true;
+	char c = level[row][col];
+	return c != ' ' && c != 'P';
 }

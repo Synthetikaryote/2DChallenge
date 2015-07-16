@@ -10,6 +10,7 @@ public:
 		return instance;
 	}
 	Level* level;
+	float gravity = 9.8f;
 private:
 	Uber() {};                   // Constructor? (the {} brackets) are needed here.
 

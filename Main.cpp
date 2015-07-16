@@ -50,12 +50,6 @@ int main(int argc, char* args[]) {
 	
 	// load the player
 	player = new Player();
-	player->sprite = new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt");
-	player->sprite->SetAnimation("p3_walk");
-	player->offsetX = -player->sprite->GetFrames("p3_walk")[0].w / 2.0f;
-	player->offsetY = Uber::I().level->th - player->sprite->GetFrames("p3_walk")[0].h + 4.0f;
-	player->x = Uber::I().level->playerStartX + player->offsetX;
-	player->y = Uber::I().level->playerStartY + player->offsetY;
 
 	SDL_Rect levelRect;
 	levelRect.w = SCREEN_WIDTH;
@@ -93,7 +87,7 @@ int main(int argc, char* args[]) {
 		player->Draw(screen, -screenX, -screenY);
 
 		// debug red square
-		SDL_FillRect(screen, &(Utils::MakeRect(player->x - player->offsetX - screenX, player->y - player->offsetY + Uber::I().level->th - screenY, 3, 3)), SDL_MapRGB(screen->format, 255, 0, 0));
+		SDL_FillRect(screen, &(Utils::MakeRect(player->collisionX - screenX, player->collisionY - screenY, 3, 3)), SDL_MapRGB(screen->format, 255, 0, 0));
 
 		// update the screen
 		if (SDL_Flip(screen) == -1) {
