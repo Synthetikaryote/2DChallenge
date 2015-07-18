@@ -77,8 +77,8 @@ int main(int argc, char* args[]) {
 		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 200, 200));
 
 		// blit the level so that the player is in the center
-		float screenX = player->x - player->offsetX - SCREEN_WIDTH / 2;
-		float screenY = player->y - player->offsetY - SCREEN_HEIGHT / 2;
+		float screenX = player->x - SCREEN_WIDTH / 2;
+		float screenY = player->y - SCREEN_HEIGHT / 2;
 		levelRect.x = screenX;
 		levelRect.y = screenY;
 		SDL_BlitSurface(Uber::I().level->surface, &levelRect, screen, NULL);

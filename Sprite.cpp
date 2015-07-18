@@ -57,14 +57,17 @@ void Sprite::Update(float elapsed) {
 }
 
 void Sprite::Draw(int x, int y, SDL_Surface* destination) {
-	string animationName = currentAnimationName;
-	if (currentAnimationFlipped)
-		animationName += "_flipped";
-	SDL_BlitSurface(currentAnimationFlipped ? spriteSheetFlipped : spriteSheet, &(frames[animationName][currentAnimationIndex]), destination, &Utils::MakeRect(x, y, 0, 0));
+	SDL_BlitSurface(currentAnimationFlipped ? spriteSheetFlipped : spriteSheet, &GetCurrentFrame(), destination, &Utils::MakeRect(x, y, 0, 0));
 }
 
 vector<SDL_Rect> Sprite::GetFrames(string animationName) {
 	return frames[animationName];
+}
+SDL_Rect Sprite::GetCurrentFrame() {
+	string animationName = currentAnimationName;
+	if (currentAnimationFlipped)
+		animationName += "_flipped";
+	return frames[animationName][currentAnimationIndex];
 }
 
 void Sprite::SetAnimation(string animationName, bool flipped, float framesPerSecond) {

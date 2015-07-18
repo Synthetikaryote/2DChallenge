@@ -1,28 +1,12 @@
-﻿Build started 7/18/2015 1:44:16 PM.
+﻿Build started 7/18/2015 2:29:27 PM.
      1>Project "Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\2DChallenge.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Tools\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Level.cpp Main.cpp Player.cpp Sprite.cpp
-         Level.cpp
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\level.cpp(47): warning C4018: '<' : signed/unsigned mismatch
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\level.cpp(48): warning C4018: '<' : signed/unsigned mismatch
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\level.cpp(53): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\level.cpp(54): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
-         Sprite.cpp
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\sprite.cpp(53): warning C4018: '>=' : signed/unsigned mismatch
+         C:\Tools\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Player.cpp
          Player.cpp
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(35): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(36): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(48): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(55): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(66): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(74): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-         Main.cpp
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(82): warning C4244: '=' : conversion from 'float' to 'Sint16', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(83): warning C4244: '=' : conversion from 'float' to 'Sint16', possible loss of data
-     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\main.cpp(103): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(22): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(28): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(38): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>y:\art institute\course challenge\vgp230 - 2d games programming\2dchallenge\player.cpp(45): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
        Link:
          C:\Tools\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib SDL_image.lib SDL_ttf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Y:\Art Institute\Course Challenge\VGP230 - 2D Games Programming\2DChallenge\Debug\2DChallenge.lib" /MACHINE:X86 Debug\Character.obj
          Debug\Enemy.obj
@@ -35,4 +19,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.28
+Time Elapsed 00:00:01.21

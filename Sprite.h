@@ -20,6 +20,7 @@ public:
 	~Sprite();
 	void Update(float elapsed);
 	void Draw(int x, int y, SDL_Surface* destination);
+	SDL_Rect GetCurrentFrame();
 	vector<SDL_Rect> GetFrames(string animationName);
 	void SetAnimation(string animationName, bool flipped = false, float framesPerSecond = 20.0f);
 };
