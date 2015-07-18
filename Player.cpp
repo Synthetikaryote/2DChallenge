@@ -19,36 +19,27 @@ Player::~Player()
 }
 
 bool Player::MoveWithCollisionCheckX(float dx) {
-	int row = y / Uber::I().level->tileHeight;
-	float r = abs(dx);
-	if (r < 0.001f)
-		return false;
-	for (float i = r; i >= 0; i--) {
-		float testdx = (i / r) * dx;
-		int col = (x + testdx) / Uber::I().level->tileWidth;
-		if (!Uber::I().level->IsBlocked(col, row)) {
-			x += testdx;
-			return i != r;
-		}
+	if (Uber::I().level->IsBlocked(x + dx, y)) {
+		if (dx > 0)
+			x = floor((x + dx) / Uber::I().level->tileWidth) * Uber::I().level->tileWidth - 0.1f;
+		else
+			x = ceil((x + dx) / Uber::I().level->tileWidth) * Uber::I().level->tileWidth + 0.1f;
+		return true;
 	}
-	return true;
+	x += dx;
+	return false;
 }
 
 bool Player::MoveWithCollisionCheckY(float dy) {
-	int col = x / Uber::I().level->tileWidth;
-	float r = abs(dy);
-	if (r < 0.001f)
-		return false;
-	for (float i = r; i >= 0; i--) {
-		float ratio = i / r;
-		float testdy = (i / r) * dy;
-		int row = (y + testdy) / Uber::I().level->tileHeight;
-		if (!Uber::I().level->IsBlocked(col, row)) {
-			y += testdy;
-			return i != r;
-		}
+	if (Uber::I().level->IsBlocked(x, y + dy)) {
+		if (dy > 0)
+			y = floor((y + dy) / Uber::I().level->tileHeight) * Uber::I().level->tileHeight - 0.1f;
+		else
+			y = ceil((x + dy) / Uber::I().level->tileHeight) * Uber::I().level->tileHeight + 0.1f;
+		return true;
 	}
-	return true;
+	y += dy;
+	return false;
 }
 
 
@@ -77,10 +68,6 @@ void Player::Update(float elapsed) {
 	
 	if (vx != 0)
 		facingLeft = vx < 0;
-	
-	sprite->SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")), facingLeft);
-	offsetX = -sprite->GetCurrentFrame().w / 2.0f;
-	offsetY = -sprite->GetCurrentFrame().h + 4.0f;
 
 	vy += Uber::I().gravity * elapsed;
 
@@ -91,6 +78,13 @@ void Player::Update(float elapsed) {
 	else {
 		onGround = false;
 	}
-	MoveWithCollisionCheckX(vx);
+	if (MoveWithCollisionCheckX(vx)) {
+		vx = 0.0f;
+	}
+	
+	sprite->SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")), facingLeft);
+	offsetX = -sprite->GetCurrentFrame().w / 2.0f;
+	offsetY = -sprite->GetCurrentFrame().h + 4.0f;
+
 	vx = 0.0f;
 }

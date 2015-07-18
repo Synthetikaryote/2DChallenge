@@ -74,9 +74,12 @@ Level::~Level()
 	SDL_FreeSurface(surface);
 }
 
-bool Level::IsBlocked(int col, int row) {
+bool Level::IsBlockedColRow(int col, int row) {
 	if (col < 0 || col >= w || row < 0 || row >= h)
 		return true;
 	char c = level[row][col];
 	return c != ' ' && c != 'P';
+}
+bool Level::IsBlocked(float x, float y) {
+	return IsBlockedColRow(x / tileWidth, y / tileHeight);
 }

@@ -8,17 +8,18 @@ class Level
 {
 public:
 	vector<string> level;
-	int w; // width
-	int h; // height
-	int tileWidth; // tile width
-	int tileHeight; // tile height
-	float playerStartX;
+	int w; // map width, in number of tiles
+	int h; // map height, in number of tiles
+	int tileWidth; // in pixels
+	int tileHeight; // in pixels
+	float playerStartX; // top-left corner of the tile where the player starts
 	float playerStartY;
 	SDL_Surface* surface;
 
 	Level(string fileName);
 	~Level();
 
-	bool IsBlocked(int col, int row);
+	bool IsBlockedColRow(int col, int row);
+	bool IsBlocked(float x, float y);
 };
 
