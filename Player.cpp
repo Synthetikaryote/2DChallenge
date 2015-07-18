@@ -5,6 +5,7 @@
 Player::Player()
 {
 	ducking = false;
+	facingRight = true;
 	speed = 300.0f;
 	sprite = new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt");
 	sprite->SetAnimation("p3_walk");
@@ -98,18 +99,20 @@ void Player::Update(float elapsed) {
 		y += doy;
 	}
 	if (!ducking || !onGround) {
-		if (state[SDLK_d]) {
-			vx += speed * elapsed;
-		}
 		if (state[SDLK_a]) {
 			vx -= speed * elapsed;
+			facingRight = false;
+		}
+		if (state[SDLK_d]) {
+			vx += speed * elapsed;
+			facingRight = true;
 		}
 	}
 	if ((state[SDLK_w] || state[SDLK_SPACE]) && onGround) {
 		vy -= 10.0f;
 	}
 
-	sprite->SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")));
+	sprite->SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")), !facingRight);
 
 	vy += Uber::I().gravity * elapsed;
 

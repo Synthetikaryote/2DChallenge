@@ -11,6 +11,11 @@ Sprite::Sprite(string spriteSheetImage, string spriteSheetData) {
 	char _;
 	SDL_Rect rect;
 	string curAnimation;
+	spriteSheet = Utils::load_image(spriteSheetImage);
+	SDL_SetAlpha(spriteSheet, SDL_SRCALPHA | SDL_RLEACCEL, 255);
+	spriteSheetFlipped = Utils::load_image(spriteSheetImage, true);
+	SDL_SetAlpha(spriteSheetFlipped, SDL_SRCALPHA | SDL_RLEACCEL, 255);
+
 	while (spriteData >> frameName >> _ >> rect.x >> rect.y >> rect.w >> rect.h) {
 		// the animation name is the frame name without the numbers at the end
 		string animationName;
@@ -29,15 +34,15 @@ Sprite::Sprite(string spriteSheetImage, string spriteSheetData) {
 			curAnimation = animationName;
 		}
 		frames[curAnimation].push_back(rect);
+		frames[curAnimation + "_flipped"].push_back(Utils::MakeRect(spriteSheetFlipped->w - rect.x - rect.w, rect.y, rect.w, rect.h));
 	}
 	spriteData.close();
-	spriteSheet = Utils::load_image(spriteSheetImage);
-	SDL_SetAlpha(spriteSheet, SDL_SRCALPHA | SDL_RLEACCEL, 255);
 }
 
 Sprite::~Sprite()
 {
 	SDL_FreeSurface(spriteSheet);
+	SDL_FreeSurface(spriteSheetFlipped);
 }
 
 void Sprite::Update(float elapsed) {
@@ -52,17 +57,27 @@ void Sprite::Update(float elapsed) {
 }
 
 void Sprite::Draw(int x, int y, SDL_Surface* destination) {
-	SDL_BlitSurface(spriteSheet, &(frames[currentAnimationName][currentAnimationIndex]), destination, &Utils::MakeRect(x, y, 0, 0));
+	string animationName = currentAnimationName;
+	if (currentAnimationFlipped)
+		animationName += "_flipped";
+	SDL_BlitSurface(currentAnimationFlipped ? spriteSheetFlipped : spriteSheet, &(frames[animationName][currentAnimationIndex]), destination, &Utils::MakeRect(x, y, 0, 0));
 }
 
 vector<SDL_Rect> Sprite::GetFrames(string animationName) {
 	return frames[animationName];
 }
 
-void Sprite::SetAnimation(string animationName, float framesPerSecond) {
+void Sprite::SetAnimation(string animationName, bool flipped, float framesPerSecond) {
 	this->framesPerSecond = framesPerSecond;
-	if (animationName.compare(currentAnimationName) == 0) return;
-	currentAnimationName = animationName;
-	currentAnimationIndex = 0;
-	secondsUntilNextFrame = 1.0f / framesPerSecond;
+	if (animationName.compare(currentAnimationName) == 0) {
+		if (flipped == currentAnimationFlipped) {
+			return;
+		}
+	}
+	else {
+		currentAnimationName = animationName;
+		currentAnimationIndex = 0;
+		secondsUntilNextFrame = 1.0f / framesPerSecond;
+	}
+	currentAnimationFlipped = flipped;
 }

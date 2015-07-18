@@ -6,13 +6,50 @@ using namespace std;
 
 class Utils {
 public:
-	static SDL_Surface* load_image(string filename) {
+	static void FlipHorizontally(SDL_Surface*& image)
+	{
+		// create a copy of the image
+		int w = image->w;
+		int h = image->h;
+		SDL_Surface* flipped_image = SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
+
+		// lock
+		if (SDL_MUSTLOCK(image))
+			SDL_LockSurface(image);
+		if (SDL_MUSTLOCK(flipped_image))
+			SDL_LockSurface(flipped_image);
+
+		Uint32 *pixels = (Uint32 *)image->pixels;
+		Uint32 *flippedPixels = (Uint32 *)flipped_image->pixels;
+
+		// loop through pixels
+		for (int y = 0; y<h; y++)
+			for (int x = 0; x<w; x++)
+				// copy pixels, but reverse the x pixels!
+				flippedPixels[(y * w) + x] = pixels[(y * w) + (w - x - 1)];
+
+		// unlock
+		if (SDL_MUSTLOCK(image))
+			SDL_UnlockSurface(image);
+		if (SDL_MUSTLOCK(flipped_image))
+			SDL_UnlockSurface(flipped_image);
+
+		// free original and assign flipped to it
+		SDL_FreeSurface(image);
+		image = flipped_image;
+	}
+
+	static SDL_Surface* load_image(string filename, bool flipHorizontal = false) {
 		SDL_Surface* loadedImage = IMG_Load(filename.c_str());
 		if (loadedImage) {
-			//Create an optimized image
+			if (flipHorizontal) {
+				FlipHorizontally(loadedImage);
+			}
+
+			// create an optimized image
 			SDL_Surface* optimizedImage = SDL_DisplayFormatAlpha(loadedImage);
 
-			//Free the old image
+			// free the old image
 			SDL_FreeSurface(loadedImage);
 
 			return optimizedImage;
@@ -37,26 +74,5 @@ public:
 
 	static SDL_Rect MakeRect(int x, int y, int w, int h) {
 		SDL_Rect rect; rect.x = x; rect.y = y; rect.w = w; rect.h = h; return rect;
-	}
-
-	static void flipHorizontally(SDL_Surface*& image)
-	{
-		// create a copy of the image
-		SDL_Surface* flipped_image = SDL_CreateRGBSurface(SDL_SWSURFACE, image->w, image->h, image->format->BitsPerPixel,
-			image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
-
-		// loop through pixels
-		for (int y = 0; y<image->h; y++)
-		{
-			for (int x = 0; x<image->w; x++)
-			{
-				// copy pixels, but reverse the x pixels!
-				putpixel(flipped_image, x, y, getpixel(image, image->w - x - 1, y));
-			}
-		}
-
-		// free original and assign flipped to it
-		SDL_FreeSurface(image);
-		image = flipped_image;
 	}
 };

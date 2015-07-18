@@ -6,6 +6,7 @@ class Player :
 public:
 	bool onGround;
 	bool ducking;
+	bool facingRight;
 	float speed;
 	float collisionX;
 	float collisionY;
