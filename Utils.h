@@ -38,4 +38,25 @@ public:
 	static SDL_Rect MakeRect(int x, int y, int w, int h) {
 		SDL_Rect rect; rect.x = x; rect.y = y; rect.w = w; rect.h = h; return rect;
 	}
+
+	static void flipHorizontally(SDL_Surface*& image)
+	{
+		// create a copy of the image
+		SDL_Surface* flipped_image = SDL_CreateRGBSurface(SDL_SWSURFACE, image->w, image->h, image->format->BitsPerPixel,
+			image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
+
+		// loop through pixels
+		for (int y = 0; y<image->h; y++)
+		{
+			for (int x = 0; x<image->w; x++)
+			{
+				// copy pixels, but reverse the x pixels!
+				putpixel(flipped_image, x, y, getpixel(image, image->w - x - 1, y));
+			}
+		}
+
+		// free original and assign flipped to it
+		SDL_FreeSurface(image);
+		image = flipped_image;
+	}
 };

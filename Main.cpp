@@ -86,9 +86,6 @@ int main(int argc, char* args[]) {
 		// blit the player
 		player->Draw(screen, -screenX, -screenY);
 
-		// debug red square
-		SDL_FillRect(screen, &(Utils::MakeRect(player->collisionX - screenX, player->collisionY - screenY, 3, 3)), SDL_MapRGB(screen->format, 255, 0, 0));
-
 		// update the screen
 		if (SDL_Flip(screen) == -1) {
 			return 1;

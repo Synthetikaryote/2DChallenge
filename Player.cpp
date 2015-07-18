@@ -42,6 +42,44 @@ bool Player::MoveWithCollisionCheck(float dx, float dy) {
 	return true;
 }
 
+bool Player::MoveWithCollisionCheckX(float dx) {
+	collisionY = y - offsetY + Uber::I().level->tileHeight;
+	int row = collisionY / Uber::I().level->tileHeight;
+	float r = abs(dx);
+	if (r < 0.001f)
+		return false;
+	for (float i = r; i >= 0; i--) {
+		float testdx = (i / r) * dx;
+		collisionX = x - offsetX + testdx;
+		int col = collisionX / Uber::I().level->tileWidth;
+		if (!Uber::I().level->IsBlocked(col, row)) {
+			x += testdx;
+			return i != r;
+		}
+	}
+	return true;
+}
+
+bool Player::MoveWithCollisionCheckY(float dy) {
+	collisionX = x - offsetX;
+	int col = collisionX / Uber::I().level->tileWidth;
+	float r = abs(dy);
+	if (r < 0.001f)
+		return false;
+	for (float i = r; i >= 0; i--) {
+		float ratio = i / r;
+		float testdy = (i / r) * dy;
+		collisionY = y - offsetY + Uber::I().level->tileHeight + testdy;
+		int row = collisionY / Uber::I().level->tileHeight;
+		if (!Uber::I().level->IsBlocked(col, row)) {
+			y += testdy;
+			return i != r;
+		}
+	}
+	return true;
+}
+
+
 void Player::Update(float elapsed) {
 	Character::Update(elapsed);
 
@@ -58,25 +96,30 @@ void Player::Update(float elapsed) {
 		float doy = Uber::I().level->tileHeight - sprite->GetFrames("p3_walk")[0].h + 4.0f - offsetY;
 		offsetY += doy;
 		y += doy;
-
+	}
+	if (!ducking || !onGround) {
 		if (state[SDLK_d]) {
 			vx += speed * elapsed;
 		}
 		if (state[SDLK_a]) {
 			vx -= speed * elapsed;
 		}
-		if (state[SDLK_w]) {
-			vy -= 10.0f;
-		}
+	}
+	if ((state[SDLK_w] || state[SDLK_SPACE]) && onGround) {
+		vy -= 10.0f;
 	}
 
-	sprite->SetAnimation(ducking ? "p3_duck" : (vx ? "p3_walk" : "p3_stand"));
+	sprite->SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")));
 
 	vy += Uber::I().gravity * elapsed;
 
-	if (MoveWithCollisionCheck(0, vy)) {
+	if (MoveWithCollisionCheckY(vy)) {
+		onGround = vy > 0.0f;
 		vy = 0.0f;
 	}
-	MoveWithCollisionCheck(vx, 0);
+	else {
+		onGround = false;
+	}
+	MoveWithCollisionCheckX(vx);
 	vx = 0.0f;
 }
