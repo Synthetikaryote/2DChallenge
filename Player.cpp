@@ -2,15 +2,22 @@
 #include "Uber.h"
 #include <cmath>
 
+void Player::Respawn() {
+	ducking = false;
+	facingLeft = false;
+	speed = 300.0f;
+	sprite->SetAnimation("p3_stand");
+	x = Uber::I().level->playerStartX + Uber::I().level->tileWidth / 2.0f;
+	y = Uber::I().level->playerStartY + Uber::I().level->tileHeight - 1.0f;
+}
+
 Player::Player()
 {
 	ducking = false;
 	facingLeft = false;
 	speed = 300.0f;
 	sprite = new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt");
-	sprite->SetAnimation("p3_stand");
-	x = Uber::I().level->playerStartX + Uber::I().level->tileWidth / 2.0f;
-	y = Uber::I().level->playerStartY + Uber::I().level->tileHeight - 1.0f;
+	Respawn();
 }
 
 
@@ -38,7 +45,7 @@ bool Player::MoveWithCollisionCheckX(float dx) {
 
 bool Player::MoveWithCollisionCheckY(float dy) {
 	float d = signbit(dy) ? -1.0f : 1.0f;
-	// check one tile at a time in case dx is more than a tile, so tiles can't be skipped
+	// check one tile at a time in case dy is more than a tile, so tiles can't be skipped
 	// start the loop at dy modulo tileHeight and add tileHeight until it passes dy
 	for (float dist = fmodf(abs(dy), Uber::I().level->tileHeight); dist <= abs(dy); dist += Uber::I().level->tileHeight) {
 		float c = d * dist;
@@ -56,6 +63,7 @@ bool Player::MoveWithCollisionCheckY(float dy) {
 
 
 void Player::Update(float elapsed) {
+	// this is an override.  do the base class update
 	Character::Update(elapsed);
 
 	// get ducking, jumping and movement key input
@@ -68,7 +76,7 @@ void Player::Update(float elapsed) {
 		vx += speed * elapsed;
 	}
 	if ((state[SDLK_w] || state[SDLK_SPACE]) && onGround) {
-		vy -= 9.0f;
+		vy -= 7.0f;
 	}
 	
 	// determine the facing direction
@@ -93,6 +101,11 @@ void Player::Update(float elapsed) {
 	}
 	if (MoveWithCollisionCheckX(vx)) {
 		vx = 0.0f;
+	}
+
+	// fall death
+	if (Uber::I().level->At(x, y) == 'X') {
+		Respawn();
 	}
 	
 	// determine the animation based on the player state

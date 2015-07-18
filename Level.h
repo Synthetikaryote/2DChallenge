@@ -21,5 +21,6 @@ public:
 
 	bool IsBlockedColRow(int col, int row);
 	bool IsBlocked(float x, float y);
+	char Level::At(float x, float y);
 };
 

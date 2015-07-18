@@ -1,5 +1,12 @@
 #include "Level.h"
 #include <fstream>
+#include <sys/stat.h>
+
+// http://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+inline bool exists(const std::string& name) {
+	struct stat buffer;
+	return (stat(name.c_str(), &buffer) == 0);
+}
 
 Level::Level(string fileName)
 {
@@ -14,12 +21,10 @@ Level::Level(string fileName)
 			while (getline(mapFile, line) && line.compare("[map]") != 0) {
 				if (line.length() > 0) {
 					string fileName = line.substr(2);
-					if (fileName.compare("empty") == 0) {
-					}
-					else if (fileName.compare("player") == 0) {
+					if (fileName.compare("player") == 0) {
 						playerC = line[0];
 					}
-					else {
+					else if (exists("Assets/Tiles/" + fileName)) {
 						tiles[line[0]] = Utils::load_image("Assets/Tiles/" + fileName);
 						SDL_SetAlpha(tiles[line[0]], SDL_SRCALPHA | SDL_RLEACCEL, 255);
 					}
@@ -78,8 +83,16 @@ bool Level::IsBlockedColRow(int col, int row) {
 	if (col < 0 || col >= w || row < 0 || row >= h)
 		return true;
 	char c = level[row][col];
-	return c != ' ' && c != 'P';
+	return string(" PX").find(c) == string::npos;
 }
 bool Level::IsBlocked(float x, float y) {
 	return IsBlockedColRow(x / tileWidth, y / tileHeight);
+}
+
+char Level::At(float x, float y) {
+	int col = x / tileWidth;
+	int row = y / tileHeight;
+	if (col < 0 || col >= w || row < 0 || row >= h)
+		return '\0';
+	return level[row][col];
 }

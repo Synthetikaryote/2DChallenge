@@ -10,6 +10,7 @@ public:
 	float speed;
 	Player();
 	~Player();
+	void Respawn();
 	void Update(float elapsed) override;
 	bool MoveWithCollisionCheckX(float dx);
 	bool MoveWithCollisionCheckY(float dy);

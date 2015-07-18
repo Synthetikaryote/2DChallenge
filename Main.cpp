@@ -1,15 +1,9 @@
 #include "SDL.h"
-#include "SDL_image.h"
 #include <string>
-#include <map>
-#include <vector>
-#include <fstream>
 #include <iostream>
 #include "Utils.h"
-#include "Sprite.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Level.h"
 #include "Uber.h"
 using namespace std;
 
@@ -43,7 +37,7 @@ int main(int argc, char* args[]) {
 	}
 
 	//Set the window caption
-	SDL_WM_SetCaption("2DChallenge", NULL);
+	SDL_WM_SetCaption("Bob the Alien", NULL);
 
 	// load the level
 	Uber::I().level = new Level("Assets/map.txt");
