@@ -13,6 +13,6 @@ public:
 	void Update(float elapsed) override;
 	bool MoveWithCollisionCheckX(float dx);
 	bool MoveWithCollisionCheckY(float dy);
-	bool MoveWithCollisionCheck(float dx, float dy);
+	void GotHit(Character* source) override;
 };
 

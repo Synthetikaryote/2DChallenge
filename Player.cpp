@@ -13,6 +13,7 @@ Player::Player(float spawnX, float spawnY) : Character(spawnX, spawnY)
 
 Player::~Player()
 {
+	delete sprite;
 }
 
 void Player::Respawn() {
@@ -114,6 +115,31 @@ void Player::Update(float elapsed) {
 	offsetX = -sprite->GetCurrentFrame().w / 2.0f;
 	offsetY = -sprite->GetCurrentFrame().h + 4.0f;
 
+	// check if the player intersected an enemy
+	for (auto enemy : Uber::I().enemies) {
+
+		// skip checking against dead enemies
+		if (!enemy->isAlive) continue;
+
+		SDL_Rect* p = &Utils::MakeRect(x + offsetX, y + offsetY, sprite->GetCurrentFrame().w, sprite->GetCurrentFrame().h);
+		SDL_Rect* e = &Utils::MakeRect(enemy->x + enemy->offsetX, enemy->y + enemy->offsetY, enemy->sprite->GetCurrentFrame().w, enemy->sprite->GetCurrentFrame().h);
+		// check if the sprites overlap
+		if (Utils::intersection(p, e)) {
+			// if the player's feet is higher than the enemy's midpoint, kill the enemy
+			if (p->y + p->h <= e->y + e->h / 2.0f) {
+				enemy->GotHit(this);
+			}
+			// otherwise, the player got hit
+			else {
+				GotHit(enemy);
+			}
+		}
+	}
+
 	// always zero out the x velocity because that's how platformers work!
 	vx = 0.0f;
+}
+
+void Player::GotHit(Character* source) {
+	Respawn();
 }

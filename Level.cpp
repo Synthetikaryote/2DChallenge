@@ -13,7 +13,6 @@ inline bool exists(const std::string& name) {
 
 Level::Level(string fileName)
 {
-	char playerC, slimeC; // characters on the legend
 	map<char, SDL_Surface*> tiles;
 
 	ifstream mapFile(fileName);
@@ -53,8 +52,8 @@ Level::Level(string fileName)
 	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tileWidth, h * tileHeight, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0x00000000);
 #endif
 	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 100, 150, 200));
-	for (int r = 0; r < level.size(); r++) {
-		for (int c = 0; c < level[r].length(); c++) {
+	for (int r = 0; r < (int)level.size(); r++) {
+		for (int c = 0; c < (int)level[r].length(); c++) {
 			if (tiles.count(level[r][c])) {
 				Utils::apply_surface(c * tileWidth, r * tileHeight, tiles[level[r][c]], surface);
 			}

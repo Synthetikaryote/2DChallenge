@@ -16,6 +16,7 @@ public:
 	Player* player;
 	vector<Enemy*> enemies;
 	Uint32 skyColor;
+	Sprite* enemySprite; // enemies share a sprite
 private:
 	Uber() {}; // Constructor? (the {} brackets) are needed here.
 

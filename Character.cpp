@@ -4,6 +4,7 @@
 Character::Character(float spawnX, float spawnY) {
 	this->spawnX = spawnX;
 	this->spawnY = spawnY;
+	isAlive = true;
 }
 
 Character::~Character() {
@@ -14,4 +15,8 @@ void Character::Update(float elapsed) {
 }
 void Character::Draw(SDL_Surface* destination, float offsetX, float offsetY) {
 	sprite->Draw(x + this->offsetX + offsetX, y + this->offsetY + offsetY, destination);
+}
+
+void Character::GotHit(Character* source) {
+
 }

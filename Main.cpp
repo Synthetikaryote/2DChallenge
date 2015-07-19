@@ -43,6 +43,8 @@ int main(int argc, char* args[]) {
 	// this will also spawn the player and enemies
 	Uber::I().level = new Level("Assets/map.txt");
 
+	// enemies will share a sprite sheet, so create that first
+	Uber::I().enemySprite = new Sprite("Assets/Enemies/enemies_spritesheet.png", "Assets/Enemies/enemies_spritesheet.txt");
 	// spawn the player and enemies
 	for (int row = 0; row < Uber::I().level->level.size(); row++) {
 		for (int col = 0; col < Uber::I().level->level[row].length(); col++) {
@@ -116,6 +118,7 @@ int main(int argc, char* args[]) {
 
 	// free the memory
 	delete Uber::I().level;
+	delete Uber::I().enemySprite;
 	for (auto enemy : Uber::I().enemies) {
 		delete enemy;
 	}

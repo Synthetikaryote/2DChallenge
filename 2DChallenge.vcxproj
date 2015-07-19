@@ -47,6 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,7 +74,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp">
-      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Slime.cpp" />

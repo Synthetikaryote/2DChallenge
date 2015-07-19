@@ -75,4 +75,11 @@ public:
 	static SDL_Rect MakeRect(int x, int y, int w, int h) {
 		SDL_Rect rect; rect.x = x; rect.y = y; rect.w = w; rect.h = h; return rect;
 	}
+
+	// http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
+	static bool intersection(SDL_Rect* a, SDL_Rect* b) {
+		if (a->x <= b->x + b->w && a->x + a->w >= b->x && a->y <= b->y + b->h && a->y + a->h >= b->y)
+			return true;
+		return false;
+	}
 };
