@@ -7,6 +7,7 @@
 #include "Uber.h"
 #include "Level.h"
 #include "Slime.h"
+#include "Flyer.h"
 using namespace std;
 
 int main(int argc, char* args[]) {
@@ -56,6 +57,9 @@ int main(int argc, char* args[]) {
 				}
 				else if (entity.compare("slime") == 0) {
 					Uber::I().enemies.push_back(new Slime(col * Uber::I().level->tileWidth, row * Uber::I().level->tileHeight));
+				}
+				else if (entity.compare("flyer") == 0) {
+					Uber::I().enemies.push_back(new Flyer(col * Uber::I().level->tileWidth, row * Uber::I().level->tileHeight));
 				}
 			}
 		}

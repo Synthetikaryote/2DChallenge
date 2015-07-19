@@ -2,7 +2,6 @@
 #include "Uber.h"
 
 Slime::Slime(float spawnX, float spawnY) : Enemy(spawnX, spawnY) {
-	isFlipped = false;
 	speed = 70.0f;
 	SetAnimation("slimeWalk", isFlipped, 4.0f);
 	x = spawnX + Uber::I().level->tileWidth / 2.0f;
@@ -29,10 +28,6 @@ void Slime::Update(float elapsed) {
 			SetAnimation("slimeWalk", isFlipped, 4.0f);
 		}
 	}
-
-	// recalculate the visual offset depending on the sprite frame
-	offsetX = -GetCurrentFrame().w / 2.0f;
-	offsetY = -GetCurrentFrame().h + 4.0f;
 }
 
 void Slime::GotHit(Character* source) {

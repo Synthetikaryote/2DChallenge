@@ -107,10 +107,6 @@ void Player::Update(float elapsed) {
 	// determine the animation based on the player state
 	SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")), isFlipped);
 
-	// recalculate the visual offset depending on the sprite frame
-	offsetX = -GetCurrentFrame().w / 2.0f;
-	offsetY = -GetCurrentFrame().h + 4.0f;
-
 	// check if the player intersected an enemy
 	for (auto enemy : Uber::I().enemies) {
 
@@ -124,6 +120,8 @@ void Player::Update(float elapsed) {
 			// if the player's feet is higher than the enemy's midpoint, kill the enemy
 			if (p->y + p->h <= e->y + e->h / 2.0f) {
 				enemy->GotHit(this);
+				// bounce off
+				vy = (state[SDLK_w] || state[SDLK_SPACE]) ? -8.0f : -4.0f;
 			}
 			// otherwise, the player got hit
 			else {

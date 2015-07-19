@@ -6,6 +6,7 @@ Character::Character(float spawnX, float spawnY, Sprite* sprite) {
 	this->spawnY = spawnY;
 	this->sprite = sprite;
 	isAlive = true;
+	isFlipped = false;
 }
 
 Character::~Character() {
@@ -19,6 +20,10 @@ void Character::Update(float elapsed) {
 		if (currentAnimationIndex >= sprite->GetFrames(currentAnimationName).size()) {
 			currentAnimationIndex = 0;
 		}
+
+		// recalculate the visual offset depending on the sprite frame
+		offsetX = -GetCurrentFrame().w / 2.0f;
+		offsetY = -GetCurrentFrame().h + 4.0f;
 	}
 }
 void Character::Draw(SDL_Surface* destination, float offsetX, float offsetY) {
@@ -48,6 +53,10 @@ void Character::SetAnimation(string animationName, bool flipped, float framesPer
 		secondsUntilNextFrame = 1.0f / framesPerSecond;
 	}
 	isFlipped = flipped;
+
+	// recalculate the visual offset depending on the sprite frame
+	offsetX = -GetCurrentFrame().w / 2.0f;
+	offsetY = -GetCurrentFrame().h + 4.0f;
 }
 
 void Character::GotHit(Character* source) {

@@ -8,6 +8,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="Flyer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sprite.h" />
@@ -18,5 +19,6 @@
     <ClInclude Include="Uber.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Slime.h" />
+    <ClInclude Include="Flyer.h" />
   </ItemGroup>
 </Project>

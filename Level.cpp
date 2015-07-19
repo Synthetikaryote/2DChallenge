@@ -79,7 +79,7 @@ bool Level::IsBlockedColRow(int col, int row) {
 	if (col < 0 || col >= w || row < 0 || row >= h)
 		return true;
 	char c = level[row][col];
-	return string(" PXS").find(c) == string::npos;
+	return string(" PXSF|").find(c) == string::npos;
 }
 bool Level::IsBlocked(float x, float y) {
 	return IsBlockedColRow(x / tileWidth, y / tileHeight);
@@ -95,5 +95,5 @@ char Level::At(float x, float y) {
 
 string Level::EntityAt(float x, float y) {
 	char c = At(x, y);
-	return legend.count(c) ? legend[c] : '\0';
+	return legend.count(c) ? legend[c] : "";
 }
