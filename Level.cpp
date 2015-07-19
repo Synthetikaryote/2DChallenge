@@ -52,7 +52,7 @@ Level::Level(string fileName)
 #else
 	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, w * tileWidth, h * tileHeight, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0x00000000);
 #endif
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 100, 200, 200));
+	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 100, 150, 200));
 	for (int r = 0; r < level.size(); r++) {
 		for (int c = 0; c < level[r].length(); c++) {
 			if (tiles.count(level[r][c])) {

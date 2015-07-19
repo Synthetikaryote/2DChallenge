@@ -15,6 +15,7 @@ public:
 	float gravity = 9.8f;
 	Player* player;
 	vector<Enemy*> enemies;
+	Uint32 skyColor;
 private:
 	Uber() {}; // Constructor? (the {} brackets) are needed here.
 

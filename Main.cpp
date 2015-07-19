@@ -87,7 +87,7 @@ int main(int argc, char* args[]) {
 		}
 		
 		// fill the screen with sky color
-		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 200, 200));
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 150, 200));
 
 		// blit the level so that the player is in the center
 		float screenX = Uber::I().player->x - SCREEN_WIDTH / 2;
@@ -97,7 +97,6 @@ int main(int argc, char* args[]) {
 		SDL_BlitSurface(Uber::I().level->surface, &levelRect, screen, NULL);
 
 		// draw the enemies
-		// update the enemies
 		for (auto enemy : Uber::I().enemies) {
 			enemy->Draw(screen, -screenX, -screenY);
 		}
