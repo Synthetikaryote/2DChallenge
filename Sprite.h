@@ -10,18 +10,10 @@ class Sprite
 	SDL_Surface* spriteSheet;
 	SDL_Surface* spriteSheetFlipped;
 	map<string, vector<SDL_Rect>> frames;
-	float secondsUntilNextFrame;
 public:
-	string currentAnimationName;
-	int currentAnimationIndex;
-	bool currentAnimationFlipped;
-	float framesPerSecond;
 	Sprite(string spriteSheetImage, string spriteSheetData);
 	~Sprite();
-	void Update(float elapsed);
-	void Draw(int x, int y, SDL_Surface* destination);
-	SDL_Rect GetCurrentFrame();
+	void Sprite::Draw(int x, int y, SDL_Surface* destination, bool flipped, string animationName, int animationIndex);
 	vector<SDL_Rect> GetFrames(string animationName);
-	void SetAnimation(string animationName, bool flipped = false, float framesPerSecond = 20.0f);
 };
 

@@ -2,12 +2,8 @@
 #include "Uber.h"
 #include <cmath>
 
-Player::Player(float spawnX, float spawnY) : Character(spawnX, spawnY)
+Player::Player(float spawnX, float spawnY) : Character(spawnX, spawnY, new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt"))
 {
-	ducking = false;
-	facingLeft = false;
-	speed = 300.0f;
-	sprite = new Sprite("Assets/Player/p3_spritesheet.png", "Assets/Player/p3_spritesheet.txt");
 	Respawn();
 }
 
@@ -18,9 +14,9 @@ Player::~Player()
 
 void Player::Respawn() {
 	ducking = false;
-	facingLeft = false;
+	isFlipped = false;
 	speed = 300.0f;
-	sprite->SetAnimation("p3_stand");
+	SetAnimation("p3_stand");
 	x = spawnX + Uber::I().level->tileWidth / 2.0f;
 	y = spawnY + Uber::I().level->tileHeight - 1.0f;
 }
@@ -76,12 +72,12 @@ void Player::Update(float elapsed) {
 		vx += speed * elapsed;
 	}
 	if ((state[SDLK_w] || state[SDLK_SPACE]) && onGround) {
-		vy -= 7.0f;
+		vy -= 7.5f;
 	}
 	
 	// determine the facing direction
 	if (vx != 0.0f)
-		facingLeft = vx < 0;
+		isFlipped = vx < 0;
 
 	// can't move while ducking unless in the air
 	if (ducking && onGround) {
@@ -109,11 +105,11 @@ void Player::Update(float elapsed) {
 	}
 	
 	// determine the animation based on the player state
-	sprite->SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")), facingLeft);
+	SetAnimation(ducking ? "p3_duck" : (!onGround ? "p3_jump" : (vx ? "p3_walk" : "p3_stand")), isFlipped);
 
 	// recalculate the visual offset depending on the sprite frame
-	offsetX = -sprite->GetCurrentFrame().w / 2.0f;
-	offsetY = -sprite->GetCurrentFrame().h + 4.0f;
+	offsetX = -GetCurrentFrame().w / 2.0f;
+	offsetY = -GetCurrentFrame().h + 4.0f;
 
 	// check if the player intersected an enemy
 	for (auto enemy : Uber::I().enemies) {
@@ -121,8 +117,8 @@ void Player::Update(float elapsed) {
 		// skip checking against dead enemies
 		if (!enemy->isAlive) continue;
 
-		SDL_Rect* p = &Utils::MakeRect(x + offsetX, y + offsetY, sprite->GetCurrentFrame().w, sprite->GetCurrentFrame().h);
-		SDL_Rect* e = &Utils::MakeRect(enemy->x + enemy->offsetX, enemy->y + enemy->offsetY, enemy->sprite->GetCurrentFrame().w, enemy->sprite->GetCurrentFrame().h);
+		SDL_Rect* p = &Utils::MakeRect(x + offsetX, y + offsetY, GetCurrentFrame().w, GetCurrentFrame().h);
+		SDL_Rect* e = &Utils::MakeRect(enemy->x + enemy->offsetX, enemy->y + enemy->offsetY, enemy->GetCurrentFrame().w, enemy->GetCurrentFrame().h);
 		// check if the sprites overlap
 		if (Utils::intersection(p, e)) {
 			// if the player's feet is higher than the enemy's midpoint, kill the enemy
