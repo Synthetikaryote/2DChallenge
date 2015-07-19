@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Uber.h"
+#include "Level.h"
+#include "Slime.h"
 using namespace std;
 
 int main(int argc, char* args[]) {
@@ -14,8 +16,6 @@ int main(int argc, char* args[]) {
 	const int SCREEN_BPP = 32;
 
 	SDL_Surface* screen = NULL;
-	Player* player;
-	vector<Enemy*> enemies;
 
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
@@ -40,11 +40,25 @@ int main(int argc, char* args[]) {
 	SDL_WM_SetCaption("Bob the Alien", NULL);
 
 	// load the level
+	// this will also spawn the player and enemies
 	Uber::I().level = new Level("Assets/map.txt");
-	
-	// load the player
-	player = new Player();
 
+	// spawn the player and enemies
+	for (int row = 0; row < Uber::I().level->level.size(); row++) {
+		for (int col = 0; col < Uber::I().level->level[row].length(); col++) {
+			char c = Uber::I().level->level[row][col];
+			if (Uber::I().level->legend.count(c)) {
+				string entity = Uber::I().level->legend[c];
+				if (entity.compare("player") == 0) {
+					Uber::I().player = new Player(col * Uber::I().level->tileWidth, row * Uber::I().level->tileHeight);
+				}
+				else if (entity.compare("slime") == 0) {
+					Uber::I().enemies.push_back(new Slime(col * Uber::I().level->tileWidth, row * Uber::I().level->tileHeight));
+				}
+			}
+		}
+	}
+	
 	SDL_Rect levelRect;
 	levelRect.w = SCREEN_WIDTH;
 	levelRect.h = SCREEN_HEIGHT;
@@ -57,9 +71,14 @@ int main(int argc, char* args[]) {
 		float elapsed = (ticks - lastTicks) / 1000.0f;
 		lastTicks = ticks;
 
+		// update the enemies
+		for (auto enemy : Uber::I().enemies) {
+			enemy->Update(elapsed);
+		}
 		// update the player
-		player->Update(elapsed);
-
+		Uber::I().player->Update(elapsed);
+		
+		// check for clicking the X on the window
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
@@ -71,32 +90,37 @@ int main(int argc, char* args[]) {
 		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 100, 200, 200));
 
 		// blit the level so that the player is in the center
-		float screenX = player->x - SCREEN_WIDTH / 2;
-		float screenY = player->y - SCREEN_HEIGHT / 2;
+		float screenX = Uber::I().player->x - SCREEN_WIDTH / 2;
+		float screenY = Uber::I().player->y - SCREEN_HEIGHT / 2;
 		levelRect.x = screenX;
 		levelRect.y = screenY;
 		SDL_BlitSurface(Uber::I().level->surface, &levelRect, screen, NULL);
 
-		// blit the player
-		player->Draw(screen, -screenX, -screenY);
+		// draw the enemies
+		// update the enemies
+		for (auto enemy : Uber::I().enemies) {
+			enemy->Draw(screen, -screenX, -screenY);
+		}
+		// draw the player
+		Uber::I().player->Draw(screen, -screenX, -screenY);
 
 		// update the screen
 		if (SDL_Flip(screen) == -1) {
 			return 1;
 		}
 
-		// keep the framerate at 60 fps
+		// don't exceed 60 fps
 		int delay = 1000 / 60 - SDL_GetTicks() + lastTicks;
-		if (delay>0)
+		if (delay > 0)
 			SDL_Delay(delay);
 	}
 
 	// free the memory
 	delete Uber::I().level;
-	delete player;
-	for (int i = 0; i < enemies.size(); i++) {
-		delete enemies[i];
+	for (auto enemy : Uber::I().enemies) {
+		delete enemy;
 	}
+	delete Uber::I().player;
 	SDL_Quit(); // frees the screen surface
 
 	return 0;

@@ -1,6 +1,9 @@
 #include "Level.h"
 #include <fstream>
 #include <sys/stat.h>
+#include "Uber.h"
+#include "Character.h"
+#include "Slime.h"
 
 // http://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
 inline bool exists(const std::string& name) {
@@ -10,7 +13,7 @@ inline bool exists(const std::string& name) {
 
 Level::Level(string fileName)
 {
-	char playerC; // player character on the legend
+	char playerC, slimeC; // characters on the legend
 	map<char, SDL_Surface*> tiles;
 
 	ifstream mapFile(fileName);
@@ -20,13 +23,14 @@ Level::Level(string fileName)
 			// read the legend and load the map tiles
 			while (getline(mapFile, line) && line.compare("[map]") != 0) {
 				if (line.length() > 0) {
+					char c = line[0];
 					string fileName = line.substr(2);
-					if (fileName.compare("player") == 0) {
-						playerC = line[0];
-					}
-					else if (exists("Assets/Tiles/" + fileName)) {
+					if (exists("Assets/Tiles/" + fileName)) {
 						tiles[line[0]] = Utils::load_image("Assets/Tiles/" + fileName);
 						SDL_SetAlpha(tiles[line[0]], SDL_SRCALPHA | SDL_RLEACCEL, 255);
+					}
+					else {
+						legend[c] = fileName;
 					}
 				}
 			}
@@ -51,14 +55,7 @@ Level::Level(string fileName)
 	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 100, 200, 200));
 	for (int r = 0; r < level.size(); r++) {
 		for (int c = 0; c < level[r].length(); c++) {
-			if (c == ' ') {
-			}
-			else if (level[r][c] == playerC) {
-				// get the player coordinates from the spawn point marker
-				playerStartX = c * tileWidth;
-				playerStartY = r * tileHeight;
-			}
-			else {
+			if (tiles.count(level[r][c])) {
 				Utils::apply_surface(c * tileWidth, r * tileHeight, tiles[level[r][c]], surface);
 			}
 		}
@@ -83,7 +80,7 @@ bool Level::IsBlockedColRow(int col, int row) {
 	if (col < 0 || col >= w || row < 0 || row >= h)
 		return true;
 	char c = level[row][col];
-	return string(" PX").find(c) == string::npos;
+	return string(" PXS").find(c) == string::npos;
 }
 bool Level::IsBlocked(float x, float y) {
 	return IsBlockedColRow(x / tileWidth, y / tileHeight);
@@ -95,4 +92,9 @@ char Level::At(float x, float y) {
 	if (col < 0 || col >= w || row < 0 || row >= h)
 		return '\0';
 	return level[row][col];
+}
+
+string Level::EntityAt(float x, float y) {
+	char c = At(x, y);
+	return legend.count(c) ? legend[c] : '\0';
 }

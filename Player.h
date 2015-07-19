@@ -6,9 +6,8 @@ class Player :
 public:
 	bool onGround;
 	bool ducking;
-	bool facingLeft;
 	float speed;
-	Player();
+	Player(float spawnX, float spawnY);
 	~Player();
 	void Respawn();
 	void Update(float elapsed) override;

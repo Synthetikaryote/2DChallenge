@@ -7,13 +7,12 @@
 class Level
 {
 public:
+	map<char, string> legend;
 	vector<string> level;
 	int w; // map width, in number of tiles
 	int h; // map height, in number of tiles
 	int tileWidth; // in pixels
 	int tileHeight; // in pixels
-	float playerStartX; // top-left corner of the tile where the player starts
-	float playerStartY;
 	SDL_Surface* surface;
 
 	Level(string fileName);
@@ -21,6 +20,7 @@ public:
 
 	bool IsBlockedColRow(int col, int row);
 	bool IsBlocked(float x, float y);
-	char Level::At(float x, float y);
+	char At(float x, float y);
+	string EntityAt(float x, float y);
 };
 

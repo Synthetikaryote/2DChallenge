@@ -1,5 +1,7 @@
 #pragma once
 #include "Level.h"
+#include "Player.h"
+#include "Enemy.h"
 // Singleton http://stackoverflow.com/questions/1008019/c-singleton-design-pattern
 class Uber
 {
@@ -11,8 +13,10 @@ public:
 	}
 	Level* level;
 	float gravity = 9.8f;
+	Player* player;
+	vector<Enemy*> enemies;
 private:
-	Uber() {};                   // Constructor? (the {} brackets) are needed here.
+	Uber() {}; // Constructor? (the {} brackets) are needed here.
 
 	// C++ 11
 	// =======
@@ -20,5 +24,4 @@ private:
 	// we don't want.
 	Uber(Uber const&) = delete;
 	void operator=(Uber const&) = delete;
-
 };

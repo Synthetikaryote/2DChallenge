@@ -1,11 +1,9 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy()
-{
+Enemy::Enemy(float spawnX, float spawnY) : Character(spawnX, spawnY) {
 }
 
 
-Enemy::~Enemy()
-{
+Enemy::~Enemy() {
 }

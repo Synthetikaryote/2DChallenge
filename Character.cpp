@@ -1,7 +1,9 @@
 #include "Character.h"
 
 
-Character::Character() {
+Character::Character(float spawnX, float spawnY) {
+	this->spawnX = spawnX;
+	this->spawnY = spawnY;
 }
 
 Character::~Character() {

@@ -4,7 +4,7 @@ class Enemy :
 	public Character
 {
 public:
-	Enemy();
+	Enemy(float spawnX, float spawnY);
 	~Enemy();
 };
 

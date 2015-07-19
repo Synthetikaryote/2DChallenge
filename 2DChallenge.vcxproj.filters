@@ -7,6 +7,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Slime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sprite.h" />
@@ -16,5 +17,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Uber.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Slime.h" />
   </ItemGroup>
 </Project>

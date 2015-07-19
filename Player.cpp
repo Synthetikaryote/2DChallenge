@@ -2,16 +2,7 @@
 #include "Uber.h"
 #include <cmath>
 
-void Player::Respawn() {
-	ducking = false;
-	facingLeft = false;
-	speed = 300.0f;
-	sprite->SetAnimation("p3_stand");
-	x = Uber::I().level->playerStartX + Uber::I().level->tileWidth / 2.0f;
-	y = Uber::I().level->playerStartY + Uber::I().level->tileHeight - 1.0f;
-}
-
-Player::Player()
+Player::Player(float spawnX, float spawnY) : Character(spawnX, spawnY)
 {
 	ducking = false;
 	facingLeft = false;
@@ -20,9 +11,17 @@ Player::Player()
 	Respawn();
 }
 
-
 Player::~Player()
 {
+}
+
+void Player::Respawn() {
+	ducking = false;
+	facingLeft = false;
+	speed = 300.0f;
+	sprite->SetAnimation("p3_stand");
+	x = spawnX + Uber::I().level->tileWidth / 2.0f;
+	y = spawnY + Uber::I().level->tileHeight - 1.0f;
 }
 
 bool Player::MoveWithCollisionCheckX(float dx) {
@@ -104,7 +103,7 @@ void Player::Update(float elapsed) {
 	}
 
 	// fall death
-	if (Uber::I().level->At(x, y) == 'X') {
+	if (Uber::I().level->EntityAt(x, y).compare("death") == 0) {
 		Respawn();
 	}
 	
